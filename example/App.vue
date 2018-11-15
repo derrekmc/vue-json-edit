@@ -55,17 +55,17 @@ export default {
 	methods: {
 	
 		//JSON format print
-		formatJson: function(txt, compress /*是否为压缩模式*/) {
-			/* 格式化JSON源码(对象转换为JSON文本) */
+		formatJson: function(txt, compress /*Whether it is compressed mode*/) {
+			/* Format JSON source code (objects are converted to JSON text) */
 			var indentChar = "  ";
 			if (/^\s*$/.test(txt)) {
-				console.error("数据为空,无法格式化! ");
+				console.error("The data is empty and cannot be formatted! ");
 				return;
 			}
 			try {
 				var data = eval("(" + txt + ")");
 			} catch (e) {
-				throw ("数据源语法错误,格式化失败! 错误信息: " + e.description, "err");
+				throw ("Data source syntax error, formatting failed! Error message: " + e.description, "err");
 				return;
 			}
 			var draw = [],
@@ -75,33 +75,33 @@ export default {
 				nodeCount = 0,
 				maxDepth = 0;
 
-			var notify = function(name, value, isLast, indent /*缩进*/, formObj) {
-				nodeCount++; /*节点计数*/
-				for (var i = 0, tab = ""; i < indent; i++) tab += indentChar; /* 缩进HTML */
-				tab = compress ? "" : tab; /*压缩模式忽略缩进*/
-				maxDepth = ++indent; /*缩进递增并记录*/
+			var notify = function(name, value, isLast, indent /*indentation*/, formObj) {
+				nodeCount++; /*Node Count*/
+				for (var i = 0, tab = ""; i < indent; i++) tab += indentChar; /* indentationHTML */
+				tab = compress ? "" : tab; /**/
+				maxDepth = ++indent; /*Compressed mode ignores indentation*/
 				if (value && value.constructor == Array) {
-					/*处理数组*/
+					/*Processing Array*/
 					draw.push(
 						tab + (formObj ? '"' + name + '":' : "") + "[" + line
-					); /*缩进'[' 然后换行*/
+					); /*indentation'[' Then wrap*/
 					for (var i = 0; i < value.length; i++)
 						notify(i, value[i], i == value.length - 1, indent, false);
 					draw.push(
 						tab + "]" + (isLast ? line : "," + line)
-					); /*缩进']'换行,若非尾元素则添加逗号*/
+					); /*indentation']'Wrap, add a comma if it is not a tail element*/
 				} else if (value && typeof value == "object") {
 					/*处理对象*/
 					draw.push(
 						tab + (formObj ? '"' + name + '":' : "") + "{" + line
-					); /*缩进'{' 然后换行*/
+					); /*indentation'{' Then wrap*/
 					var len = 0,
 						i = 0;
 					for (var key in value) len++;
 					for (var key in value) notify(key, value[key], ++i == len, indent, true);
 					draw.push(
 						tab + "}" + (isLast ? line : "," + line)
-					); /*缩进'}'换行,若非尾元素则添加逗号*/
+					); /*indentation'}'Wrap, add a comma if it is not a tail element*/
 				} else {
 					if (typeof value == "string") value = '"' + value + '"';
 					draw.push(
@@ -119,7 +119,7 @@ export default {
 			return draw.join("");
 		},
 
-		//绘制res body
+		//Display res body
 		drawResCode: function (content) {
 			var target = document.getElementById('res_code');
 			target.textContent = content
